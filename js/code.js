@@ -3,6 +3,7 @@ let n = 1;
 let i = 1;
 let likes = 1;
 let disLikes = 1;
+let showListClick = 0;
 let img;
 let info;
 let text = document.createTextNode("");
@@ -22,8 +23,8 @@ function fetchAPI(i){
 function start(){
     for(i=1;i<11;i++){
         fetchAPI(i);
-        
     }
+    
 }
 function showDataFromLocalStorage(profil){
     let x = localStorage.getItem(profil);
@@ -51,7 +52,9 @@ function addImage(){
 }
 function checkArray(){
     if(n==10){
+        checkProfil();
         start();
+
         n=0;
     }
 }
@@ -59,7 +62,6 @@ function rememberLike(){
     let like = localStorage.getItem(n);
     localStorage.setItem('like' + likes, like);
     likes++;
-    
 }
 function rememberDisLike(){
     let disLike = localStorage.getItem(n);
@@ -67,16 +69,52 @@ function rememberDisLike(){
     disLikes++;
 }
 function checkProfil(){
-    for(y=0;y<localStorage.length;y++){
-        let checkLike = showDataFromLocalStorage('like' + y);
-        console.log(checkLike);
-        if(checkLike != null){
-            if(checkLike.id == showDataFromLocalStorage(n).id){
-                console.log('deleted: ' + showDataFromLocalStorage(n).name)
+    for(let i=0; i<localStorage.length;i++){
+        let profilLike = showDataFromLocalStorage('like' + i);
+        let profil = showDataFromLocalStorage(i);
+        console.log(localStorage.length);
+        if(profilLike !== null && profil !== null){
+            console.log('not empty');
+            if(profil.id == profilLike.id){
+                console.log('deleted' + profil.name);
                 localStorage.removeItem(n);
             }
         }
+        
     }
+}
+function makeList(){
+    let ul = document.createElement('UL');
+        ul.className = 'list';
+        container.appendChild(ul);
+        img.src = '';
+
+    for(let i=0; i<localStorage.length;i++){
+        let profil = showDataFromLocalStorage('like' + i);
+        let dislike = showDataFromLocalStorage('dislike' + i);
+        if(profil !== null){
+            let li = document.createElement('LI');
+            let name = document.createTextNode(profil.name + ', like');
+            li.appendChild(name);
+            li.addEventListener("click", function(){
+                li.className = "select";
+            })
+            ul.appendChild(li);
+            
+        }
+        if(dislike !== null){
+            let li = document.createElement('LI');
+            let name2 = document.createTextNode(dislike.name + ', dislike');
+            li.appendChild(name2);
+        
+            ul.appendChild(li);
+        }
+               
+    }
+    
+}
+function makeDisLike(key){
+
 }
 function makeLayOut(){
     let h1 = document.createElement('H1');
@@ -102,6 +140,24 @@ function makeLayOut(){
         rememberDisLike();
     });
 
+    let showList = document.createElement('button');
+    showList.className = 'showList';
+    container.appendChild(showList);
+    showList.addEventListener("click", function(){
+             
+        if(showListClick==0){
+            showListClick++;
+            dislike.disabled = true;
+            like.disabled = true;
+            makeList();
+        }
+        else if(showListClick>1){
+            showListClick==0;
+            dislike.disabled = false;
+            like.disabled = false;
+            ul.className = "list disableList"
+        }
+    });
     let like = document.createElement('button');
     like.className = 'like';
     container.appendChild(like);
@@ -112,8 +168,8 @@ function makeLayOut(){
         addImage();
         
         rememberLike();
-        
     });
+
 }
 localStorage.clear();
 makeLayOut();

@@ -47,3 +47,29 @@ button{
     background-repeat: no-repeat;
     background-position: center;
 }
+.list{
+    list-style-type: none;
+    margin: -255px 0;
+    padding: 0;
+    height: 180px;
+    overflow: scroll;
+    background-color: whitesmoke;
+}
+.disableList{
+    display: none;
+}
+li{
+    background-color: whitesmoke;
+    padding: 10px;
+}
+.showList{
+    width: 30px;
+    height: 30px;
+    margin: 10px -15px;
+    background-image: url('../list.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.select{
+    background-color: aquamarine;
+}
